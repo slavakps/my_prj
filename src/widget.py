@@ -19,3 +19,12 @@ def mask_account_card(data: str) -> str:
         else:
             # Если номер карты некорректный, возвращаем исходную строку без изменений
             return data
+
+
+def get_date(date_str: str) -> str:
+    """
+    Преобразует дату
+    """
+    date_part = date_str.split('T')[0]
+    year, month, day = date_part.split('-')
+    return f"{day}.{month}.{year}"
