@@ -1,25 +1,44 @@
-def filter_by_state(operations: list[dict[str, object]], state: str = "EXECUTED") -> list[dict[str, object]]:
+def filter_by_state(operations: list, state: str = "EXECUTED") -> list:
     """
-    Фильтрует список операций, оставляя только операции с указанным статусом.
+    Фильтрует операции по статусу.
+
+    Принимает:
+        operations - список словарей (каждый словарь - одна операция)
+        state - нужный статус (по умолчанию "EXECUTED")
+
+    Возвращает:
+        список отфильтрованных операций (список словарей)
     """
-    filtered = []
-
-    for op in operations:
-        if op.get("state") == state:
-            filtered.append(op)
-
-    return filtered
+    result = []
+    for operation in operations:
+        if operation.get("state") == state:
+            result.append(operation)
+    return result
 
 
-def sort_by_date(operations: list[dict[str, str]]) -> list[dict[str, str]]:
-    """Сортирует операции по дате (от старых к новым)."""
+def sort_by_date(operations: list, reverse: bool = False) -> list:
+    """
+    Сортирует операции по дате.
 
-    sorted_ops = operations.copy()
-    n = len(sorted_ops)
+    Принимает:
+        operations - список словарей (должен содержать ключ "date")
+        reverse - порядок сортировки:
+            False (по умолчанию) - старые к новым
+            True - новые к старым
 
+    Возвращает:
+        отсортированный список операций (список словарей)
+    """
+    # Делаем копию, чтобы не менять исходный список
+    sorted_list = operations.copy()
+
+    # Пузырьковая сортировка
+    n = len(sorted_list)
     for i in range(n):
         for j in range(n - i - 1):
-            if sorted_ops[j]["date"] > sorted_ops[j + 1]["date"]:
-                sorted_ops[j], sorted_ops[j + 1] = sorted_ops[j + 1], sorted_ops[j]
+            # Сравниваем даты с учётом параметра reverse
+            if (sorted_list[j]["date"] > sorted_list[j + 1]["date"]) != reverse:
+                # Меняем местами
+                sorted_list[j], sorted_list[j + 1] = sorted_list[j + 1], sorted_list[j]
 
-    return sorted_ops
+    return sorted_list
