@@ -9,6 +9,9 @@ def filter_by_state(operations: list, state: str = "EXECUTED") -> list:
     Возвращает:
         список отфильтрованных операций (список словарей)
     """
+    if not isinstance(state, str):
+        return []
+
     result = []
     for operation in operations:
         if operation.get("state") == state:
