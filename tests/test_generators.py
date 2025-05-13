@@ -128,5 +128,3 @@ def test_empty_range():
     """Проверяет обработку пустого диапазона (когда start > end)"""
     assert list(card_number_generator(10, 5)) == []
     assert list(card_number_generator(2, 1)) == []
-
-
