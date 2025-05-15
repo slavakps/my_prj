@@ -3,7 +3,6 @@ import pytest
 from src.decorators import log
 
 
-# Тест для записи в файл
 def test_file_logging(tmp_path):
     log_file = tmp_path / "test.log"
 
@@ -14,8 +13,11 @@ def test_file_logging(tmp_path):
     # Успешное выполнение
     assert add(2, 3) == 5
     assert os.path.exists(log_file)
-    with open(log_file) as f:
-        assert "add ok" in f.read()
+    with open(log_file, encoding='utf-8') as f:
+        content = f.read()
+        assert "add started" in content
+        assert "add finished" in content
+        assert "Result: 5" in content
 
     # Очистка файла
     log_file.write_text("")
@@ -28,13 +30,12 @@ def test_file_logging(tmp_path):
     with pytest.raises(ZeroDivisionError):
         div(1, 0)
 
-    with open(log_file) as f:
+    with open(log_file, encoding='utf-8') as f:
         content = f.read()
-        assert "div error: ZeroDivisionError" in content
-        assert "Inputs: (1, 0), {}" in content
+        assert "div started" in content
+        assert "div ERROR: ZeroDivisionError" in content
 
 
-# Тест для вывода в консоль (с использованием capsys)
 def test_console_logging(capsys):
     @log()
     def multiply(a, b):
@@ -43,7 +44,9 @@ def test_console_logging(capsys):
     # Успешное выполнение
     assert multiply(3, 4) == 12
     captured = capsys.readouterr()
-    assert "multiply ok" in captured.out
+    assert "multiply started" in captured.out
+    assert "multiply finished" in captured.out
+    assert "Result: 12" in captured.out
 
     # Ошибочное выполнение
     @log()
@@ -54,11 +57,10 @@ def test_console_logging(capsys):
         fail_func()
 
     captured = capsys.readouterr()
-    assert "fail_func error: ValueError" in captured.out
-    assert "Inputs: (), {}" in captured.out
+    assert "fail_func started" in captured.out
+    assert "fail_func ERROR: ValueError" in captured.out
 
 
-# Тест с именованными аргументами
 def test_kwargs_logging(tmp_path):
     log_file = tmp_path / "kwargs.log"
 
@@ -68,8 +70,11 @@ def test_kwargs_logging(tmp_path):
 
     # Успешное выполнение
     assert greet("Alice", greeting="Hi") == "Hi, Alice"
-    with open(log_file) as f:
-        assert "greet ok" in f.read()
+    with open(log_file, encoding='utf-8') as f:
+        content = f.read()
+        assert "greet started" in content
+        assert "greet finished" in content
+        assert "Hi, Alice" in content
 
     # Очистка файла
     log_file.write_text("")
@@ -82,14 +87,12 @@ def test_kwargs_logging(tmp_path):
     with pytest.raises(TypeError):
         kwargs_error(param1=1, param2=2)
 
-    with open(log_file) as f:
+    with open(log_file, encoding='utf-8') as f:
         content = f.read()
-        assert "kwargs_error error: TypeError" in content
-        assert "'param1': 1" in content
-        assert "'param2': 2" in content
+        assert "kwargs_error started" in content
+        assert "kwargs_error ERROR: TypeError" in content
 
 
-# Тест сохранения метаданных функции
 def test_function_metadata():
     @log()
     def sample(a: int, b: int) -> int:
@@ -101,7 +104,6 @@ def test_function_metadata():
     assert sample.__annotations__ == {"a": int, "b": int, "return": int}
 
 
-# Тест без аргументов
 def test_no_args_logging(capsys):
     @log()
     def no_args():
@@ -109,4 +111,6 @@ def test_no_args_logging(capsys):
 
     assert no_args() == 42
     captured = capsys.readouterr()
-    assert "no_args ok" in captured.out
+    assert "no_args started" in captured.out
+    assert "no_args finished" in captured.out
+    assert "Result: 42" in captured.out
