@@ -1,5 +1,7 @@
 import os
+
 import pytest
+
 from src.decorators import log
 
 
@@ -13,7 +15,7 @@ def test_file_logging(tmp_path):
     # Успешное выполнение
     assert add(2, 3) == 5
     assert os.path.exists(log_file)
-    with open(log_file, encoding='utf-8') as f:
+    with open(log_file, encoding="utf-8") as f:
         content = f.read()
         assert "add started" in content
         assert "add finished" in content
@@ -30,7 +32,7 @@ def test_file_logging(tmp_path):
     with pytest.raises(ZeroDivisionError):
         div(1, 0)
 
-    with open(log_file, encoding='utf-8') as f:
+    with open(log_file, encoding="utf-8") as f:
         content = f.read()
         assert "div started" in content
         assert "div ERROR: ZeroDivisionError" in content
@@ -70,7 +72,7 @@ def test_kwargs_logging(tmp_path):
 
     # Успешное выполнение
     assert greet("Alice", greeting="Hi") == "Hi, Alice"
-    with open(log_file, encoding='utf-8') as f:
+    with open(log_file, encoding="utf-8") as f:
         content = f.read()
         assert "greet started" in content
         assert "greet finished" in content
@@ -87,7 +89,7 @@ def test_kwargs_logging(tmp_path):
     with pytest.raises(TypeError):
         kwargs_error(param1=1, param2=2)
 
-    with open(log_file, encoding='utf-8') as f:
+    with open(log_file, encoding="utf-8") as f:
         content = f.read()
         assert "kwargs_error started" in content
         assert "kwargs_error ERROR: TypeError" in content
