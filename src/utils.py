@@ -8,6 +8,12 @@ def get_transaction_amount_rub(transaction: dict) -> float:
     :return: Сумма в рублях (float)
     """
     try:
+        amount = float(transaction["amount"])
+        currency = transaction.get("currency", "RUB").upper()
+
+        if currency == "RUB":
+            return amount
+
         return convert_to_rub(transaction)
     except (KeyError, ValueError) as e:
         raise ValueError(f"Invalid transaction data: {str(e)}")

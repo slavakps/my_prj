@@ -18,3 +18,15 @@ my_function ok
 2025-05-15 08:47:35.665866 - my_function finished. Result: 3
 2025-05-15 08:47:40.347975 - my_function started with args: (1, 2), kwargs: {}
 2025-05-15 08:47:40.348196 - my_function finished. Result: 3
+2025-05-20 23:05:08.816528 - my_function started with args: (1, 2), kwargs: {}
+2025-05-20 23:05:08.816710 - my_function finished. Result: 3
+2025-05-20 23:05:26.394955 - my_function started with args: (1, 2), kwargs: {}
+2025-05-20 23:05:26.395126 - my_function finished. Result: 3
+2025-05-20 23:08:48.766694 - my_function started with args: (1, 2), kwargs: {}
+2025-05-20 23:08:48.766853 - my_function finished. Result: 3
+2025-05-20 23:09:36.832631 - my_function started with args: (1, 2), kwargs: {}
+2025-05-20 23:09:36.832791 - my_function finished. Result: 3
+2025-05-20 23:32:31.033338 - my_function started with args: (1, 2), kwargs: {}
+2025-05-20 23:32:31.033528 - my_function finished. Result: 3
+2025-05-20 23:32:35.583638 - my_function started with args: (1, 2), kwargs: {}
+2025-05-20 23:32:35.583807 - my_function finished. Result: 3

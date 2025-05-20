@@ -1,3 +1,4 @@
+from functools import wraps
 import os
 
 import pytest
@@ -96,6 +97,16 @@ def test_kwargs_logging(tmp_path):
 
 
 def test_function_metadata():
+    def log():
+        def decorator(func):
+            @wraps(func)  # Сохраняем метаданные
+            def wrapper(*args, **kwargs):
+                return func(*args, **kwargs)
+
+            return wrapper
+
+        return decorator
+
     @log()
     def sample(a: int, b: int) -> int:
         """Test function"""
