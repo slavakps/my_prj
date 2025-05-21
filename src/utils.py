@@ -1,5 +1,21 @@
 from src.external_api import convert_to_rub
 
+import json
+
+
+def load_transactions(file_path):
+    """
+    Загружает список транзакций из JSON-файла.
+    """
+    try:
+        with open(file_path, "r", encoding="utf-8") as file:
+            data = json.load(file)
+            return data if isinstance(data, list) else []
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+    except Exception:
+        return []
+
 
 def get_transaction_amount_rub(transaction: dict) -> float:
     """
