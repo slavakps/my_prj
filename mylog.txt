@@ -1,0 +1,10 @@
+my_function ok
+my_function ok
+2025-05-20 23:03:32.821541 - my_function started with args: (1, 2), kwargs: {}
+2025-05-20 23:03:32.821712 - my_function finished. Result: 3
+2025-05-20 23:28:14.918261 - my_function started with args: (1, 2), kwargs: {}
+2025-05-20 23:28:14.918421 - my_function finished. Result: 3
+2025-05-20 23:31:31.047349 - my_function started with args: (1, 2), kwargs: {}
+2025-05-20 23:31:31.047534 - my_function finished. Result: 3
+2025-05-20 23:32:19.796981 - my_function started with args: (1, 2), kwargs: {}
+2025-05-20 23:32:19.797164 - my_function finished. Result: 3
