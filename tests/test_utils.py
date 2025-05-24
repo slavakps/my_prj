@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 import pytest
 
-from src.utils import get_transaction_amount_rub, load_transactions
+from src.utils import load_transactions, get_transaction_amount_rub
 
 
 def test_rub_transaction():
