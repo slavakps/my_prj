@@ -30,13 +30,16 @@ def test_foreign_currency_transaction():
 
 def test_invalid_amount():
     transaction = {"amount": "invalid", "currency": "RUB"}
-    with pytest.raises(ValueError, match="Invalid transaction data"):
+    with pytest.raises(
+        ValueError,
+        match="Некорректное значение в данных транзакции: could not convert string to float: 'invalid'"
+    ):
         get_transaction_amount_rub(transaction)
 
 
 def test_missing_amount():
     transaction = {"currency": "RUB"}
-    with pytest.raises(ValueError, match="Invalid transaction data"):
+    with pytest.raises(ValueError, match="Отсутствует ключ в данных транзакции: 'amount'"):
         get_transaction_amount_rub(transaction)
 
 
