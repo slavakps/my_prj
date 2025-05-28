@@ -5,19 +5,16 @@ from pathlib import Path
 from src.external_api import convert_to_rub
 
 # Настройка логгера для модуля
-logger = logging.getLogger('utils')
+logger = logging.getLogger("utils")
 logger.setLevel(logging.DEBUG)
 
 # Путь к файлу логов
 LOG_PATH = "C:/Users/Admin/PycharmProjects/my_prj/logs/utils.log"
-file_handler = logging.FileHandler(LOG_PATH, mode='w', encoding='utf-8')
+file_handler = logging.FileHandler(LOG_PATH, mode="w", encoding="utf-8")
 file_handler.setLevel(logging.DEBUG)
 
 # Форматтер для логов
-formatter = logging.Formatter(
-    '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 file_handler.setFormatter(formatter)
 
 # Добавляем обработчик к логгеру
