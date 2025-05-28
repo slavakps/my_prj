@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 import pytest
 
-from src.utils import get_transaction_amount_rub, load_transactions
+from src.utils import load_transactions, get_transaction_amount_rub
 
 
 def test_rub_transaction():
@@ -30,13 +30,16 @@ def test_foreign_currency_transaction():
 
 def test_invalid_amount():
     transaction = {"amount": "invalid", "currency": "RUB"}
-    with pytest.raises(ValueError, match="Invalid transaction data"):
+    with pytest.raises(
+        ValueError,
+        match="Некорректное значение в данных транзакции: could not convert string to float: 'invalid'"
+    ):
         get_transaction_amount_rub(transaction)
 
 
 def test_missing_amount():
     transaction = {"currency": "RUB"}
-    with pytest.raises(ValueError, match="Invalid transaction data"):
+    with pytest.raises(ValueError, match="Отсутствует ключ в данных транзакции: 'amount'"):
         get_transaction_amount_rub(transaction)
 
 
