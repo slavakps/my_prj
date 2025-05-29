@@ -1,22 +1,20 @@
 import logging
 
 # Настройка логгера для модуля masks
-logger = logging.getLogger('masks')
+logger = logging.getLogger("masks")
 logger.setLevel(logging.DEBUG)
 
 # Файловый обработчик
-file_handler = logging.FileHandler('logs/masks.log', mode='w', encoding='utf-8')
+file_handler = logging.FileHandler("logs/masks.log", mode="w", encoding="utf-8")
 file_handler.setLevel(logging.DEBUG)
 
 # Форматтер для логов
-formatter = logging.Formatter(
-    '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 file_handler.setFormatter(formatter)
 
 # Добавляем обработчик к логгеру
 logger.addHandler(file_handler)
+
 
 def get_mask_card_number(card_number: str) -> str:
     """
@@ -33,6 +31,7 @@ def get_mask_card_number(card_number: str) -> str:
     except Exception as e:
         logger.error(f"Ошибка при маскировании номера карты: {str(e)}")
         return "Неправильный номер карты"
+
 
 def get_mask_account(account_number: str) -> str:
     """

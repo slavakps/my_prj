@@ -31,8 +31,7 @@ def test_foreign_currency_transaction():
 def test_invalid_amount():
     transaction = {"amount": "invalid", "currency": "RUB"}
     with pytest.raises(
-        ValueError,
-        match="Некорректное значение в данных транзакции: could not convert string to float: 'invalid'"
+        ValueError, match="Некорректное значение в данных транзакции: could not convert string to float: 'invalid'"
     ):
         get_transaction_amount_rub(transaction)
 
