@@ -6,7 +6,7 @@ from src.trans_reader import read_transactions_from_csv, read_transactions_from_
 
 class TestTransactions(unittest.TestCase):
     # Тест для CSV
-    @patch('builtins.open', mock_open(read_data="date,amount,category\n2023-01-01,1000,Salary\n2023-01-02,-50,Groceries"))
+    @patch('builtins.open', mock_open(read_data="date;amount;category\n2023-01-01;1000;Salary\n2023-01-02;-50;Groceries"))
     def test_read_csv(self):
         result = read_transactions_from_csv()
         self.assertEqual(result, [
