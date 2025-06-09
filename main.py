@@ -1,7 +1,7 @@
-
+from src.widget import get_date, mask_account_card
 from src.processing import sort_by_date, filter_by_state
-from src.trans_reader import read_transactions_from_csv, read_transactions_from_excel
-from src.utils import load_transactions, get_transaction_amount_rub
+from src.trans_reader import read_transactions_from_csv, read_transactions_from_excel, filter_transactions_by_description
+from src.utils import load_transactions, sort_by_rub
 
 
 def filter_transactions_by_user_input(transactions):
@@ -20,81 +20,80 @@ def filter_transactions_by_user_input(transactions):
             print(f'\nСтатус операции "{status}" недоступен.')
 
 
+def file_selection():
+    user_input = input()
+    if user_input == "1":
+        print("Для обработки выбран JSON-файл")
+        return load_transactions()
+    elif user_input == "2":
+        print("Для обработки выбран CSV-файл")
+        return read_transactions_from_csv()
+    elif user_input == "3":
+        print("Для обработки выбран XLSX-файл")
+        return read_transactions_from_excel()
+    else: "Введен некоректный номер"
+
+
+def choice_sort_by_date(data):
+    choice_sort = input()
+    if choice_sort.lower() == "да":
+        print("Отсортировать по возрастанию или по убыванию?")
+        sort_up_or_lower = input()
+        if sort_up_or_lower == 'убыванию':
+            is_reverse = True
+            data = sort_by_date(data, is_reverse)
+        else:
+            is_reverse = False
+            data = sort_by_date(data, is_reverse)
+        return data
+
+def end_result(data) -> None:
+    if len(data) == 0:
+        print("Не найдено ни одной транзакции, подходящей под ваши условия фильтрации")
+    else:
+        print(f'Всего банковских операций в выборке: {len(data)}\n')
+
+        for transaction in data:
+            date = get_date(transaction.get('date'))
+            try:
+                mask_form = mask_account_card(transaction['from'])
+                print(f'{date} {transaction["description"]} {mask_form} -> ', end="")
+            except KeyError:
+                print(f'{date} {transaction["description"]} ', end="")
+            except AttributeError:
+                print(f"{date} {transaction["description"]} ", end="")
+
+
+            mask_to = mask_account_card(transaction['to'])
+            try:
+                amount = transaction['amount']
+            except KeyError:
+                amount = transaction["operationAmount"]["amount"]
+            try:
+                currency = transaction["currency_name"]
+            except KeyError:
+                currency = transaction["operationAmount"]["currency"]["name"]
+            print(f'{mask_to} Сумма: {amount} {currency}')
+
+
 def main():
-    print("Привет! Добро пожаловать в программу работы с банковскими транзакциями.")
-    print("Выберите необходимый пункт меню:")
-    print("1. Получить информацию о транзакциях из JSON-файла")
-    print("2. Получить информацию о транзакциях из CSV-файла")
-    print("3. Получить информацию о транзакциях из XLSX-файла")
-
-    while True:
-        choice = input("\nВведите номер пункта: ").strip()
-
-        try:
-            if choice == "1":
-                print("\nДля обработки выбран JSON-файл")
-                transactions = load_transactions()
-                filtered = filter_transactions_by_user_input(transactions)
-                user_input_1 = input("Отсортировать операции по дате? Да/Нет: ")
-                if user_input_1.lower() == "да":
-                    user_input_2 = input("Отсортировать по возрастанию/убыванию?: ")
-                    reverse_sort = user_input_2.lower() == "убыванию"
-                    filtered_transactions = sort_by_date(filtered, reverse=reverse_sort)
-                    user_input_3 = input("Выводить только рублевые транзакции? Да/Нет: ")
-                    if user_input_3.lower() == "да":
-                        filtered_transactions = get_transaction_amount_rub(transactions)
-                        print(filtered_transactions)
-                    else: print(filtered_transactions)
-                elif user_input_1.lower() == "нет":
-                    user_input_2 = input("Отсортировать по возрастанию/убыванию?: ")
-                    if user_input_2.lower() == "убыванию":
-                        filtered_transactions = sort_by_date(filtered, reverse=reverse_sort)
-                        print(filtered_transactions)
-                    else:
-                        filtered_transactions = sort_by_date(filtered)
-                        print(filtered_transactions)
-            elif choice == "2":
-                print("\nДля обработки выбран CSV-файл")
-                transactions = read_transactions_from_csv()
-                filtered = filter_transactions_by_user_input(transactions)
-                user_input_1 = input("Отсортировать операции по дате? Да/Нет: ")
-                if user_input_1.lower() == "да":
-                    user_input_2 = input("Отсортировать по возрастанию/убыванию?: ")
-                    reverse_sort = user_input_2.lower() == "убыванию"
-                    filtered_transactions = sort_by_date(filtered, reverse=reverse_sort)
-                    user_input_3 = input("Выводить только рублевые транзакции? Да/Нет: ")
-                    if user_input_3.lower() == "да":
-                        filtered_transactions = get_transaction_amount_rub(transactions)
-                        print(filtered_transactions)
-                    else:
-                        print(filtered_transactions)
-                elif user_input_1.lower() == "нет":
-                    user_input_2 = input("Отсортировать по возрастанию/убыванию?: ")
-                    if user_input_2.lower() == "убыванию":
-                        filtered_transactions = sort_by_date(filtered, reverse=reverse_sort)
-                        print(filtered_transactions)
-                    else:
-                        filtered_transactions = sort_by_date(filtered)
-                        print(filtered_transactions)
-            elif choice == "3":
-                print("\nДля обработки выбран XLSX-файл")
-                transactions = read_transactions_from_excel()
-                filtered = filter_transactions_by_user_input(transactions)
-                user_input_3_1 = input("Отсортировать операции по дате? Да/Нет: ")
-                if user_input_3_1.lower() == "да":
-                    user_input_3_2 = input("Отсортировать по возрастанию/убыванию?: ")
-                    reverse_sort = user_input_3_2.lower() == "убыванию"
-                    filtered_transactions = sort_by_date(filtered, reverse=reverse_sort)
-                    print(filtered_transactions)
-            else:
-                print("Неверный выбор. Пожалуйста, введите 1, 2 или 3.")
-                break
-        except FileNotFoundError:
-            print("Ошибка: файл не найден. Проверьте наличие файлов в папке data/")
-        except Exception as e:
-            print(f"Произошла ошибка: {str(e)}")
-            break
-        break
+    print("""Привет! Добро пожаловать в программу работы с банковскими транзакциями.
+    Выберите необходимый пункт меню:
+    1. Получить информацию о транзакциях из JSON-файла
+    2. Получить информацию о транзакциях из CSV-файла
+    3. Получить информацию о транзакциях из XLSX-файла  """)
+    data = file_selection()
+    data = filter_transactions_by_user_input(data)
+    print("Отсортировать операции по дате? Да/Нет: ")
+    data = choice_sort_by_date(data)
+    print("Выводить только рублевые транзакции? Да/Нет: ")
+    data = sort_by_rub(data)
+    print("Отфильтровать по слову в описании? Да/Нет")
+    sort_by_word = input()
+    data = filter_transactions_by_description(data, sort_by_word)
+    print("Распечатываю итоговый список транзакций")
+    data = end_result(data)
+    print(data)
 
 
 if __name__ == "__main__":

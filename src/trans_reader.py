@@ -26,23 +26,28 @@ def read_transactions_from_excel():
     return df.to_dict("records")
 
 
-def filter_transactions_by_description(transactions: list[dict], search_string: str) -> list[dict]:
+def filter_transactions_by_description(transactions: list[dict], sort_by_word: str) -> list[dict]:
     """
     Фильтрует список транзакций, оставляя только те, в описании которых встречается заданная строка.
 
     Args:
         transactions: Список словарей с данными о банковских операциях.
-        search_string: Строка для поиска в описании операций.
+        sort_by_word: Строка для поиска в описании операций.
 
     Returns:
         Список словарей с операциями, у которых в описании есть заданная строка.
     """
-    filtered_transactions = []
-    for transaction in transactions:
-        description = transaction.get('description', '')
-        if re.search(search_string, description, re.IGNORECASE):
-            filtered_transactions.append(transaction)
-    return filtered_transactions
+    if sort_by_word.lower() == "да":
+        print("Введите слово: ")
+        search_string = input()
+        filtered_transactions = []
+        for transaction in transactions:
+            description = transaction.get('description', '')
+            if re.search(search_string, description, re.IGNORECASE):
+                filtered_transactions.append(transaction)
+        return filtered_transactions
+    else:
+        return transactions
 
 
 def count_transactions_by_categories(transactions: list[dict], categories: list[str]) -> dict[str, int]:
