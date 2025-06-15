@@ -70,11 +70,11 @@ def get_transaction_amount_rub(transaction) -> float:
         logger.error(error_msg)
         raise ValueError(error_msg)
 
-def sort_by_rub(data: list)-> list:
+def sort_by_rub(data: list) -> list:
     """Фильтрация по валюте"""
     rub_transaction = input()
-    if rub_transaction.lower() == "да":
-        data = filter_by_currency(data, currency="RUB")
+    if rub_transaction.strip().lower() == "да":
+        data = filter_by_currency(data, currency = "RUB")
     return list(data)
 
 # Инициализация

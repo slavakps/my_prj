@@ -1,11 +1,14 @@
 def filter_by_currency(transactions, currency):
     """Принимает на вход список словарей, представляющих транзакции.
     Функция возвращает итератор, который поочередно выдает транзакции, где валюта операции соответствует заданной"""
-    for transaction in transactions:
-        op_amount = transaction.get("operationAmount", {})
-        curr = op_amount.get("currency", {})
-        if curr.get("code") == currency:
-            yield transaction
+    for tx in transactions:
+        if tx.get("currency_code") == currency:  # Первый вариант
+            yield tx
+        else:
+            op_amount = tx.get("operationAmount", {})
+            curr = op_amount.get("currency", {})
+            if curr.get("code") == currency:
+                yield tx
 
 
 def transaction_descriptions(transactions):

@@ -23,15 +23,15 @@ def filter_transactions_by_user_input(transactions):
 def file_selection():
     user_input = input()
     if user_input == "1":
-        print("Для обработки выбран JSON-файл")
+        print("\nДля обработки выбран JSON-файл")
         return load_transactions()
     elif user_input == "2":
-        print("Для обработки выбран CSV-файл")
+        print("\nДля обработки выбран CSV-файл")
         return read_transactions_from_csv()
     elif user_input == "3":
-        print("Для обработки выбран XLSX-файл")
+        print("\nДля обработки выбран XLSX-файл")
         return read_transactions_from_excel()
-    else: "Введен некоректный номер"
+    else: "\nВведен некоректный номер"
 
 
 def choice_sort_by_date(data):
@@ -46,22 +46,25 @@ def choice_sort_by_date(data):
             is_reverse = False
             data = sort_by_date(data, is_reverse)
         return data
+    else:
+        return data
+
 
 def end_result(data) -> None:
     if len(data) == 0:
         print("Не найдено ни одной транзакции, подходящей под ваши условия фильтрации")
     else:
-        print(f'Всего банковских операций в выборке: {len(data)}\n')
+        print(f'\nВсего банковских операций в выборке: {len(data)}\n')
 
         for transaction in data:
             date = get_date(transaction.get('date'))
             try:
                 mask_form = mask_account_card(transaction['from'])
-                print(f'{date} {transaction["description"]} {mask_form} -> ', end="")
+                print(f'\n{date} {transaction["description"]}\n{mask_form}')
             except KeyError:
-                print(f'{date} {transaction["description"]} ', end="")
+                print(f'\n{date} {transaction["description"]}')
             except AttributeError:
-                print(f"{date} {transaction["description"]} ", end="")
+                print(f"\n{date} {transaction["description"]}\n")
 
 
             mask_to = mask_account_card(transaction['to'])
@@ -73,7 +76,7 @@ def end_result(data) -> None:
                 currency = transaction["currency_name"]
             except KeyError:
                 currency = transaction["operationAmount"]["currency"]["name"]
-            print(f'{mask_to} Сумма: {amount} {currency}')
+            print(f'{mask_to}\nСумма: {amount} {currency}')
 
 
 def main():
@@ -91,7 +94,7 @@ def main():
     print("Отфильтровать по слову в описании? Да/Нет")
     sort_by_word = input()
     data = filter_transactions_by_description(data, sort_by_word)
-    print("Распечатываю итоговый список транзакций")
+    print("Распечатываю итоговый список транзакций...")
     data = end_result(data)
     print(data)
 
