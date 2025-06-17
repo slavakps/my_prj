@@ -23,7 +23,7 @@ def get_mask_card_number(card_number: str) -> str:
     """
     try:
         if len(card_number) == 16 and card_number.isdigit():
-            masked_number = f"{card_number[:4]} {card_number[4:6]}** **** {card_number[-4:]}"
+            masked_number = f"{card_number[:4]} {card_number[4:6]}** **** {card_number[-4:]}->"
             logger.info(f"Успешное маскирование номера карты: {masked_number}")
             return masked_number
         logger.error(f"Некорректный номер карты: {card_number}")
@@ -40,7 +40,7 @@ def get_mask_account(account_number: str) -> str:
     """
     try:
         if len(account_number) >= 4 and account_number.isdigit():
-            masked_account = "**" + account_number[-4:]
+            masked_account = f"** + {account_number[-4:]}"
             logger.info(f"Успешное маскирование номера счета: {masked_account}")
             return masked_account
         logger.error(f"Некорректный номер счета: {account_number}")

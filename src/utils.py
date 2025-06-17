@@ -72,7 +72,7 @@ def get_transaction_amount_rub(transaction) -> float:
 
 def sort_by_rub(data: list) -> list:
     """Фильтрация по валюте"""
-    rub_transaction = input()
+    rub_transaction = input("Выводить только рублевые транзакции? Да/Нет: ")
     if rub_transaction.strip().lower() == "да":
         data = filter_by_currency(data, currency = "RUB")
     return list(data)

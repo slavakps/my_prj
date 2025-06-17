@@ -14,7 +14,7 @@ def filter_transactions_by_user_input(transactions):
 
         if status in valid_statuses:
             filtered = filter_by_state(transactions, status)
-            print(f'\nОперации отфильтрованы по статусу "{status}"')
+            print(f'\nОперации отфильтрованы по статусу "{status}"\n')
             return filtered
         else:
             print(f'\nСтатус операции "{status}" недоступен.')
@@ -31,23 +31,30 @@ def file_selection():
     elif user_input == "3":
         print("\nДля обработки выбран XLSX-файл")
         return read_transactions_from_excel()
-    else: "\nВведен некоректный номер"
+    else:
+        print("\nОшибка: введен некорректный номер. Пожалуйста, выберите 1, 2 или 3.\n")
+        return file_selection()
 
 
 def choice_sort_by_date(data):
-    choice_sort = input()
-    if choice_sort.lower() == "да":
-        print("Отсортировать по возрастанию или по убыванию?")
-        sort_up_or_lower = input()
-        if sort_up_or_lower == 'убыванию':
-            is_reverse = True
-            data = sort_by_date(data, is_reverse)
+    """Функция для выбора сортировки операций по дате."""
+    while True:
+        choice_sort = input("Отсортировать операции по дате? (Да/Нет): ").strip().lower()
+
+        if choice_sort == "да":
+            while True:
+                sort_up_or_lower = input("Отсортировать по возрастанию или по убыванию?: ").strip().lower()
+                if sort_up_or_lower in ("убыванию", "возрастанию"):
+                    is_reverse = (sort_up_or_lower == "убыванию")
+                    return sort_by_date(data, is_reverse)
+                else:
+                    print("Ошибка: введите 'возрастанию' или 'убыванию'!")
+
+        elif choice_sort == "нет":
+            return data
+
         else:
-            is_reverse = False
-            data = sort_by_date(data, is_reverse)
-        return data
-    else:
-        return data
+            print("Ошибка: введите 'Да' или 'Нет'!")
 
 
 def end_result(data) -> None:
@@ -84,15 +91,12 @@ def main():
     Выберите необходимый пункт меню:
     1. Получить информацию о транзакциях из JSON-файла
     2. Получить информацию о транзакциях из CSV-файла
-    3. Получить информацию о транзакциях из XLSX-файла  """)
+    3. Получить информацию о транзакциях из XLSX-файла\n""")
     data = file_selection()
     data = filter_transactions_by_user_input(data)
-    print("Отсортировать операции по дате? Да/Нет: ")
     data = choice_sort_by_date(data)
-    print("Выводить только рублевые транзакции? Да/Нет: ")
     data = sort_by_rub(data)
-    print("Отфильтровать по слову в описании? Да/Нет")
-    sort_by_word = input()
+    sort_by_word = input("Отфильтровать по слову в описании? Да/Нет: ")
     data = filter_transactions_by_description(data, sort_by_word)
     print("Распечатываю итоговый список транзакций...")
     data = end_result(data)
